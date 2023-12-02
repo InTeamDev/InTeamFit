@@ -13,6 +13,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -46,9 +47,23 @@ fun JournalScreen(navController: NavController, viewModel: JournalViewModel = vi
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Spacer(modifier = Modifier.height(66.dp))
+
             Text("План на сегодня", fontSize = 24.sp, style = MaterialTheme.typography.headlineMedium)
+
             Spacer(modifier = Modifier.height(16.dp))
+
             ExerciseTable(exercises = viewModel.exercises.value ?: emptyList())
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text("Заметки", fontSize = 24.sp, style = MaterialTheme.typography.headlineMedium)
+            Spacer(modifier = Modifier.height(8.dp))
+            TextField(
+                value = viewModel.notes,
+                onValueChange = { viewModel.notes = it },
+                label = { Text("Введите ваши заметки здесь") },
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
@@ -56,14 +71,6 @@ fun JournalScreen(navController: NavController, viewModel: JournalViewModel = vi
 
 @Composable
 fun ExerciseTable(exercises: List<Exercise>) {
-    val exercises = remember {
-        mutableStateListOf(
-            Exercise("Отжимания", 3, 10),
-            Exercise("Жим ногами", 3, 10),
-            Exercise("Подтягивания", 3, 10)
-        )
-    }
-
     Column {
         Row(modifier = Modifier
             .fillMaxWidth()
