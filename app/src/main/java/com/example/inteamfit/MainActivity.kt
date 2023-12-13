@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.inteamfit.ui.screens.CameraViewScreen
 import com.example.inteamfit.ui.screens.EquipmentScreen
 import com.example.inteamfit.ui.screens.MyMenuScreen
 import com.example.inteamfit.ui.screens.JournalScreen
@@ -29,6 +30,7 @@ fun MyApp() {
             composable("menu") { MyMenuScreen(navController) }
             composable("journal") { JournalScreen(navController) }
             composable("equipment") { EquipmentScreen(navController) }
+            composable("cameraView") { CameraViewScreen(navController)}
         }
     }
 }

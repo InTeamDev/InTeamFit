@@ -35,7 +35,7 @@ fun EquipmentScreen(navController: NavController) {
         Box(modifier = Modifier
             .padding(padding)
             .fillMaxSize(), contentAlignment = Alignment.Center) {
-            Button(onClick = { /* Здесь логика для открытия камеры или галереи */ }) {
+            Button(onClick = { navController.navigate("cameraView") }) {
                 Text("Сделать фото")
             }
         }
