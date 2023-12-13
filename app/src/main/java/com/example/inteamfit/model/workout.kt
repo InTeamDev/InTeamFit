@@ -5,5 +5,5 @@ data class Workout(
     val title: String,
     val date: String,
     val notes: String,
-    val exercises: List<Exercise>
+    val exercises: List<ExerciseDetail>
 )

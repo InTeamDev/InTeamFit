@@ -1,5 +1,6 @@
 package com.example.inteamfit.ui.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -7,29 +8,31 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inteamfit.api.WorkoutService
-import com.example.inteamfit.model.Exercise
-import io.ktor.client.call.body
-import io.ktor.http.HttpStatusCode
+import com.example.inteamfit.model.ExerciseDetail
 import kotlinx.coroutines.launch
-import java.time.LocalDate
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
-class JournalViewModel(private val apiService: WorkoutService) : ViewModel() {
-    val exercises = MutableLiveData<List<Exercise>>(listOf())
+class JournalViewModel : ViewModel() {
+    var exercises = MutableLiveData<List<ExerciseDetail>>(listOf())
     var notes by mutableStateOf("")
-    private var errorMessage = MutableLiveData<String>()
 
-    fun loadExercises(date: LocalDate) {
+    private val retrofit = Retrofit.Builder()
+        .baseUrl("http://10.0.2.2:8000/api/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    private val api = retrofit.create(WorkoutService::class.java)
+
+    fun loadExercises() {
         viewModelScope.launch {
             try {
-                val response = apiService.getWorkouts(date)
-                if (response.status == HttpStatusCode.OK) {
-                    val workouts = response.body<List<Exercise>>()
-                    exercises.postValue(workouts)
-                } else {
-                    errorMessage.postValue("Ошибка: Не удалось загрузить упражнения.")
-                }
+                Log.d("WORKOUT", "loadExercises start")
+                val workout = api.getWorkout()
+                Log.d("WORKOUT", "loadExercises: $workout")
+                exercises.postValue(workout.exercises)
+                notes = workout.notes
             } catch (e: Exception) {
-                errorMessage.postValue("Исключение: ${e.message}")
+                Log.d("WORKOUT", "loadExercises: ${e.message}")
             }
         }
     }
