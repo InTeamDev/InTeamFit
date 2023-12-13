@@ -9,8 +9,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.inteamfit.ui.screens.EquipmentScreen
-import com.example.inteamfit.ui.screens.MyMenuScreen
 import com.example.inteamfit.ui.screens.JournalScreen
+import com.example.inteamfit.ui.screens.MyMenuScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
