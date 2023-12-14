@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.inteamfit.model.Exercise
+import com.example.inteamfit.model.ExerciseDetail
 import com.example.inteamfit.ui.viewmodel.JournalViewModel
 import java.util.*
 
@@ -70,7 +69,7 @@ fun JournalScreen(navController: NavController, viewModel: JournalViewModel = vi
 
 
 @Composable
-fun ExerciseTable(exercises: List<Exercise>) {
+fun ExerciseTable(exercises: List<ExerciseDetail>) {
     Column {
         Row(modifier = Modifier
             .fillMaxWidth()
@@ -81,35 +80,24 @@ fun ExerciseTable(exercises: List<Exercise>) {
         }
 
         LazyColumn {
-            items(exercises) { exercise ->
-                ExerciseRow(exercise = exercise, onCheckedChange = { checked ->
-                    exercise.checked = checked
-                })
+            items(exercises) { exerciseDetail ->
+                ExerciseRow(exerciseDetail = exerciseDetail)
             }
         }
     }
 }
 
 @Composable
-fun ExerciseRow(exercise: Exercise, onCheckedChange: (Boolean) -> Unit) {
-    val checkedState = remember { mutableStateOf(exercise.checked) }
-
+fun ExerciseRow(exerciseDetail: ExerciseDetail) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Checkbox(
-            checked = checkedState.value,
-            onCheckedChange = { isChecked ->
-                checkedState.value = isChecked
-                onCheckedChange(isChecked)
-            },
-        )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(exercise.name, fontSize = 18.sp, modifier = Modifier.weight(1f))
-        Text("${exercise.sets}", fontSize = 18.sp, modifier = Modifier.width(80.dp), textAlign = TextAlign.Center)
-        Text("${exercise.reps}", fontSize = 18.sp, modifier = Modifier.width(100.dp), textAlign = TextAlign.Center)
+        Text(exerciseDetail.exercise.name, fontSize = 18.sp, modifier = Modifier.weight(1f))
+        Text("${exerciseDetail.sets}", fontSize = 18.sp, modifier = Modifier.width(80.dp), textAlign = TextAlign.Center)
+        Text("${exerciseDetail.reps}", fontSize = 18.sp, modifier = Modifier.width(100.dp), textAlign = TextAlign.Center)
     }
 }
