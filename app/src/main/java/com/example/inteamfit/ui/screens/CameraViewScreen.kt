@@ -25,24 +25,24 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.example.inteamfit.ui.viewmodel.EquipmentViewModel
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Objects
-import androidx.navigation.NavController
+
 
 @Composable
-fun CameraViewScreen(navController: NavController) {
-    imageCaptureFromCamera()
-}
-
-@Composable
-fun imageCaptureFromCamera()
-{
-
+fun CameraViewScreen(navController: NavController, viewModel: EquipmentViewModel = viewModel()) {
     val context = LocalContext.current
     val file = context.createImageFile()
+//    val respone = viewModel.predictEquip(file)
     val uri = FileProvider.getUriForFile(
         Objects.requireNonNull(context),
         context.packageName + ".provider", file
@@ -94,11 +94,11 @@ fun imageCaptureFromCamera()
             {
                 permissionLauncher.launch(Manifest.permission.CAMERA)
             }
+
         }) {
             Text(text = "Сделать фото")
         }
     }
-
 
     if (capturedImageUri.path?.isNotEmpty() == true)
     {
@@ -108,8 +108,28 @@ fun imageCaptureFromCamera()
             painter = rememberImagePainter(capturedImageUri),
             contentDescription = null
         )
-    }
 
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(10.dp)
+                .padding(bottom = 50.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Bottom
+        ) {
+
+            Button(onClick = {
+                val fileToUpload = File(uri.toString())
+                val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+                val body = MultipartBody.Part.createFormData("file", fileToUpload.name, requestFile)
+
+                viewModel.uploadFile(body)
+
+            }) {
+                Text(text = "Отправить фото")
+            }
+        }
+    }
 }
 
 fun Context.createImageFile(): File {
