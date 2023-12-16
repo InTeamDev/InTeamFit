@@ -15,10 +15,10 @@ import com.example.inteamfit.api.RetrofitInstance
 import com.example.inteamfit.api.WorkoutApiService
 import com.example.inteamfit.ui.screens.CameraViewScreen
 import com.example.inteamfit.ui.screens.EquipmentScreen
-import com.example.inteamfit.ui.screens.WorkoutScreen
 import com.example.inteamfit.ui.screens.MyMenuScreen
-import com.example.inteamfit.ui.viewmodel.WorkoutViewModel
+import com.example.inteamfit.ui.screens.WorkoutScreen
 import com.example.inteamfit.ui.viewmodel.EquipmentViewModel
+import com.example.inteamfit.ui.viewmodel.WorkoutViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class WorkoutViewModel(private val apiService: WorkoutApiService) : ViewModel() {
     private val _workoutSlots = MutableStateFlow<List<WorkoutSlot>>(emptyList())
-    val workoutSlots: StateFlow<List<WorkoutSlot>> = _workoutSlots
 
     private val _selectedDate = MutableStateFlow<String?>(null)
     val selectedDate: StateFlow<String?> = _selectedDate

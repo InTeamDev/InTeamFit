@@ -93,7 +93,6 @@ fun CameraViewScreen(navController: NavController, viewModel: EquipmentViewModel
                 val filePath = FileUtil.getPath(context, it)
                 val file = File(filePath)
 
-                Log.d("CAMERA_TEST", "${file.length()}" )
                 val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
                 val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
@@ -176,7 +175,6 @@ fun CameraViewScreen(navController: NavController, viewModel: EquipmentViewModel
             ) {
 
                 Button(onClick = {
-                    Log.d("CAMERA_TEST", "${file.length()}" )
                     val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
                     val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
