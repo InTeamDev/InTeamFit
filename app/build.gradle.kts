@@ -54,6 +54,7 @@ android {
 }
 
 dependencies {
+    implementation("com.wdullaer:materialdatetimepicker:4.2.3")
     val camerax_version = "1.3.0"
     implementation("androidx.camera:camera-core:${camerax_version}")
     implementation("androidx.camera:camera-camera2:${camerax_version}")

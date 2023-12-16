@@ -43,7 +43,7 @@ fun MyMenuScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.Start
         ) {
             MenuItem(icon = Icons.Default.DateRange, text = "Журнал тренировок") {
-                navController.navigate("journal")
+                navController.navigate("workout")
             }
             MenuItem(icon = Icons.Default.Search, text = "Определить тренажер") {
                 navController.navigate("cameraView")

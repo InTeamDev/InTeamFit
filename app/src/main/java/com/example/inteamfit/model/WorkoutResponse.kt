@@ -1,6 +1,6 @@
 package com.example.inteamfit.model
 
-data class Workout(
+data class WorkoutResponse(
     val id: String,
     val title: String,
     val date: String,

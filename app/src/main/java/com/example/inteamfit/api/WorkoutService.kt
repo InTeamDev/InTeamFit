@@ -1,10 +1,14 @@
 package com.example.inteamfit.api
 
-import com.example.inteamfit.model.Workout
+import com.example.inteamfit.model.WorkoutResponse
+import com.example.inteamfit.model.WorkoutSlot
 import retrofit2.http.GET
+import retrofit2.http.Query
 
+interface WorkoutApiService {
+    @GET("api/workouts/slots")
+    suspend fun getWorkoutSlots(): List<WorkoutSlot>
 
-interface WorkoutService {
-    @GET("workouts")
-    suspend fun getWorkout(): Workout
+    @GET("api/workouts")
+    suspend fun getWorkoutDetails(@Query("workout_date") workoutDate: String): WorkoutResponse
 }
