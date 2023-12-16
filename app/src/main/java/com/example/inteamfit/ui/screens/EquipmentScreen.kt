@@ -75,7 +75,7 @@ fun EquipmentTable(equipments: List<Equipment>) {
                     modifier = Modifier.weight(1f).padding(4.dp)
                 )
                 Text(
-                    text = equipment.probability.toString(),
+                    text = "${(equipment.probability * 100).toInt()}%",
                     modifier = Modifier.weight(1f).padding(4.dp)
                 )
             }
