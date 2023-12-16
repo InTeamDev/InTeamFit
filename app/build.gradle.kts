@@ -86,6 +86,7 @@ dependencies {
 
     implementation("io.coil-kt:coil-compose:1.4.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.0-beta02")
 }
 
 // Allow references to generated code
