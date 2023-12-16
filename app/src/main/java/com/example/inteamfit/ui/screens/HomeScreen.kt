@@ -46,7 +46,7 @@ fun MyMenuScreen(navController: NavHostController) {
                 navController.navigate("workout")
             }
             MenuItem(icon = Icons.Default.Search, text = "Определить тренажер") {
-                navController.navigate("equipment")
+                navController.navigate("cameraView")
             }
         }
     }

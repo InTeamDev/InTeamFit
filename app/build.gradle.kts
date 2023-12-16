@@ -55,7 +55,11 @@ android {
 
 dependencies {
     implementation("com.wdullaer:materialdatetimepicker:4.2.3")
-
+    val camerax_version = "1.3.0"
+    implementation("androidx.camera:camera-core:${camerax_version}")
+    implementation("androidx.camera:camera-camera2:${camerax_version}")
+    implementation("androidx.camera:camera-lifecycle:${camerax_version}")
+    implementation("androidx.camera:camera-view:${camerax_version}")
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
 
@@ -80,6 +84,10 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    implementation("io.coil-kt:coil-compose:1.4.0")
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.0-beta02")
 }
 
 // Allow references to generated code

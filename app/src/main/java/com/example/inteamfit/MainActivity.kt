@@ -13,10 +13,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.inteamfit.api.RetrofitInstance
 import com.example.inteamfit.api.WorkoutApiService
+import com.example.inteamfit.ui.screens.CameraViewScreen
 import com.example.inteamfit.ui.screens.EquipmentScreen
 import com.example.inteamfit.ui.screens.WorkoutScreen
 import com.example.inteamfit.ui.screens.MyMenuScreen
 import com.example.inteamfit.ui.viewmodel.WorkoutViewModel
+import com.example.inteamfit.ui.viewmodel.EquipmentViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,15 +32,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyApp() {
     val navController = rememberNavController()
+    val equipViewModel: EquipmentViewModel = viewModel()
+    val workoutViewModel = viewModel<WorkoutViewModel>(factory = WorkoutViewModelFactory(RetrofitInstance.api))
     MaterialTheme {
         NavHost(navController = navController, startDestination = "menu") {
             composable("menu") { MyMenuScreen(navController) }
-            composable("workout") {
-                val workoutViewModel = viewModel<WorkoutViewModel>(factory = WorkoutViewModelFactory(
-                    RetrofitInstance.api))
-                WorkoutScreen(navController, workoutViewModel)
-            }
-            composable("equipment") { EquipmentScreen(navController) }
+            composable("workout") { WorkoutScreen(navController, workoutViewModel) }
+            composable("equipment") { EquipmentScreen(navController, equipViewModel) }
+            composable("cameraView") { CameraViewScreen(navController, equipViewModel)}
         }
     }
 }
