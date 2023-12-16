@@ -4,11 +4,12 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.net.Uri
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -78,20 +79,27 @@ fun CameraViewScreen(navController: NavController, viewModel: EquipmentViewModel
             mutableStateOf<Uri>(Uri.EMPTY)
         }
 
+        var selectedImageUri by remember { mutableStateOf<Uri?>(Uri.EMPTY) }
 
         val cameraLauncher =
             rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()){
                 capturedImageUri = uri
             }
 
-        val photoPicker =
-            rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()){ uri ->
-                if (uri != null) {
-                    capturedImageUri = uri
-                } else {
-                    Log.d("PhotoPicker", "No media selected")
-                }
+        val galleryLauncher = rememberLauncherForActivityResult(
+            ActivityResultContracts.GetContent()
+        ) { uri: Uri? ->
+            uri?.let {
+                val filePath = FileUtil.getPath(context, it)
+                val file = File(filePath)
+
+                Log.d("CAMERA_TEST", "${file.length()}" )
+                val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+                val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+
+                viewModel.uploadFile(body, navController)
             }
+        }
 
         val permissionLauncher = rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -112,13 +120,12 @@ fun CameraViewScreen(navController: NavController, viewModel: EquipmentViewModel
             Modifier
                 .fillMaxSize()
                 .padding(10.dp)
-                .padding(bottom = 50.dp),
+                .padding(50.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom
         ) {
-
             Button(onClick = {
-                photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                galleryLauncher.launch("image/*")
             }) {
                 Text(text = "Выбрать фото")
             }
@@ -169,7 +176,6 @@ fun CameraViewScreen(navController: NavController, viewModel: EquipmentViewModel
             ) {
 
                 Button(onClick = {
-                    val file = File(capturedImageUri.path)
                     Log.d("CAMERA_TEST", "${file.length()}" )
                     val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
                     val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
@@ -194,4 +200,19 @@ fun Context.createImageFile(): File {
     )
 
     return image
+}
+
+object FileUtil {
+    fun getPath(context: Context, uri: Uri): String? {
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        var cursor: Cursor? = null
+        return try {
+            cursor = context.contentResolver.query(uri, projection, null, null, null)
+            val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            cursor?.moveToFirst()
+            columnIndex?.let { cursor?.getString(it) }
+        } finally {
+            cursor?.close()
+        }
+    }
 }
