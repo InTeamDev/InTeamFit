@@ -11,8 +11,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.inteamfit.api.EquipmentService
 import com.example.inteamfit.api.RetrofitInstance
-import com.example.inteamfit.api.WorkoutApiService
+import com.example.inteamfit.api.WorkoutService
 import com.example.inteamfit.ui.screens.CameraViewScreen
 import com.example.inteamfit.ui.screens.EquipmentScreen
 import com.example.inteamfit.ui.screens.MyMenuScreen
@@ -32,8 +33,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyApp() {
     val navController = rememberNavController()
-    val equipViewModel: EquipmentViewModel = viewModel()
-    val workoutViewModel = viewModel<WorkoutViewModel>(factory = WorkoutViewModelFactory(RetrofitInstance.api))
+    val equipViewModel = viewModel<EquipmentViewModel>(factory = EquipmentViewModelFactory(RetrofitInstance.equipmentApi))
+    val workoutViewModel = viewModel<WorkoutViewModel>(factory = WorkoutViewModelFactory(RetrofitInstance.workoutApi))
     MaterialTheme {
         NavHost(navController = navController, startDestination = "menu") {
             composable("menu") { MyMenuScreen(navController) }
@@ -44,11 +45,21 @@ fun MyApp() {
     }
 }
 
-class WorkoutViewModelFactory(private val apiService: WorkoutApiService) : ViewModelProvider.Factory {
+class WorkoutViewModelFactory(private val apiService: WorkoutService) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(WorkoutViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return WorkoutViewModel(apiService) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
+
+class EquipmentViewModelFactory(private val apiService: EquipmentService) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(EquipmentViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return EquipmentViewModel(apiService) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

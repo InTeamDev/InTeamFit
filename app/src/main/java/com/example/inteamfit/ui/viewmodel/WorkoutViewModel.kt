@@ -3,7 +3,7 @@ package com.example.inteamfit.ui.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.inteamfit.api.WorkoutApiService
+import com.example.inteamfit.api.WorkoutService
 import com.example.inteamfit.model.WorkoutResponse
 import com.example.inteamfit.model.WorkoutSlot
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class WorkoutViewModel(private val apiService: WorkoutApiService) : ViewModel() {
+class WorkoutViewModel(private val apiService: WorkoutService) : ViewModel() {
     private val _workoutSlots = MutableStateFlow<List<WorkoutSlot>>(emptyList())
 
     private val _selectedDate = MutableStateFlow<String?>(null)
